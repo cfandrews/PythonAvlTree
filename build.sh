@@ -1,4 +1,4 @@
-rm -rf .mypy_cache .pytest_cache .ruff_cache src/pythontemplate.egg-info venv .coverage pyvenv.cfg dist
+rm -rf .mypy_cache .pytest_cache .ruff_cache src/avltree.egg-info venv .coverage pyvenv.cfg dist
 set -e
 python3.8 -m venv venv
 venv/bin/pip install -e '.[dev]'

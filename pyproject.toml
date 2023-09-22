@@ -3,9 +3,9 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pythontemplate"
+name = "avltree"
 version = "0.0.1"
-description = "Template repository to be used as a base for Python projects"
+description = "Lightweight, pure-python AVL tree"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {file = "LICENSE"}
@@ -13,7 +13,7 @@ authors = [{name = "Charles Andrews", email = "cfandrews@outlook.com"}]
 dependencies = []
 
 [project.urls]
-"Homepage" = "https://github.com/cfandrews/PythonTemplate"
+"Homepage" = "https://github.com/cfandrews/PythonAvlTree"
 
 [project.optional-dependencies]
 dev = [
@@ -103,7 +103,7 @@ profile = "black"
 src_paths = ["src", "tests"]
 
 [tool.pytest.ini_options]
-addopts = "--cov=pythontemplate --cov-fail-under=0 --cov-report=term-missing tests"
+addopts = "--cov=avltree --cov-fail-under=0 --cov-report=term-missing tests"
 
 [tool.mypy]
 files = ["src", "tests"]

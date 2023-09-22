@@ -1,5 +1,5 @@
 # Copyright 2023 Charles Andrews
-"""Template repository to be used as a base for Python projects."""
+"""Lightweight, pure-python AVL tree."""
 
 from .main import main
 
