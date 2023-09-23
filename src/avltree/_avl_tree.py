@@ -199,3 +199,16 @@ class AvlTree(MutableSet[_T]):
                 else:
                     yielded.add(identifier)
                     yield node.element
+
+    def minimum(self) -> _T | None:
+        """Gets the minimum element contained in this tree.
+
+        Returns:
+            _T | None: The minimum element contained in this tree.
+        """
+        if self.__root_identifier is None:
+            return None
+        node: AvlTreeNode[_T] = self.__nodes[self.__root_identifier]
+        while node.lesser_child_identifier is not None:
+            node = self.__nodes[node.lesser_child_identifier]
+        return node.element
