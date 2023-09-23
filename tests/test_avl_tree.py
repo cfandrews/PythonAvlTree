@@ -166,3 +166,20 @@ class TestAvlTree:
             assert_that(avl_tree.minimum()).is_none()
         else:
             assert_that(avl_tree.minimum()).is_equal_to(min(elements))
+
+    @staticmethod
+    @pytest.mark.parametrize(
+        "elements",
+        [[], [0], [1, 0], [1, 0, 2], [1, 0, 3, 2], [1, 0, 2, 3]],
+    )
+    def test_maximum(elements: list[int]) -> None:
+        """Tests happy path cases of AvlTree.maximum().
+
+        Args:
+            elements (list[int]): The elements of the AvlTree.
+        """
+        avl_tree: Final[AvlTree[int]] = _construct_avl_tree(elements=elements)
+        if len(elements) == 0:
+            assert_that(avl_tree.maximum()).is_none()
+        else:
+            assert_that(avl_tree.maximum()).is_equal_to(max(elements))

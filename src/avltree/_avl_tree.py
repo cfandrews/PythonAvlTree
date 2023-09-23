@@ -212,3 +212,16 @@ class AvlTree(MutableSet[_T]):
         while node.lesser_child_identifier is not None:
             node = self.__nodes[node.lesser_child_identifier]
         return node.element
+
+    def maximum(self) -> _T | None:
+        """Gets the maximum element contained in this tree.
+
+        Returns:
+            _T | None: The maximum element contained in this tree.
+        """
+        if self.__root_identifier is None:
+            return None
+        node: AvlTreeNode[_T] = self.__nodes[self.__root_identifier]
+        while node.greater_child_identifier is not None:
+            node = self.__nodes[node.greater_child_identifier]
+        return node.element
