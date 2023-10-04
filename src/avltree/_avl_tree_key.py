@@ -1,11 +1,11 @@
 # Copyright 2023 Charles Andrews
-"""Contains the AvlTreeElement class."""
+"""Contains the AvlTreeKey class."""
 from abc import abstractmethod
 from typing import Any, Protocol
 
 
-class AvlTreeElement(Protocol):
-    """Protocol which defines an element which can be stored in an AvlTree."""
+class AvlTreeKey(Protocol):
+    """Protocol which defines a key which can be stored in an AvlTree."""
 
     @abstractmethod
     def __eq__(self, other: object) -> bool:
