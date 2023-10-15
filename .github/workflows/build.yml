@@ -23,4 +23,4 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Build
       run: |
-        bash build_scripts/build.sh
+        bash build.sh
