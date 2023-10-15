@@ -202,7 +202,7 @@ class TestAvlTree:
                 ],
             ),
             (
-                [(2, "2"), (1, "1")],
+                [(2, "2"), (1, "1"), (3, "3")],
                 0,
                 "0",
                 [
@@ -214,14 +214,158 @@ class TestAvlTree:
                 ],
             ),
             (
+                [(1, "1"), (0, "0"), (2, "2")],
+                3,
+                "3",
+                [
+                    _Modification(
+                        modification_type="greater",
+                        key=2,
+                        modified=3,
+                    ),
+                ],
+            ),
+            (
+                [(2, "2"), (1, "1")],
+                0,
+                "0",
+                [
+                    _Modification(
+                        modification_type="root",
+                        initial=2,
+                        modified=1,
+                    ),
+                    _Modification(
+                        modification_type="lesser",
+                        key=2,
+                        initial=1,
+                    ),
+                    _Modification(
+                        modification_type="greater",
+                        key=1,
+                        modified=2,
+                    ),
+                    _Modification(
+                        modification_type="lesser",
+                        key=1,
+                        modified=0,
+                    ),
+                ],
+            ),
+            (
+                [(2, "2"), (0, "0")],
+                1,
+                "1",
+                [
+                    _Modification(
+                        modification_type="root",
+                        initial=2,
+                        modified=1,
+                    ),
+                    _Modification(
+                        modification_type="lesser",
+                        key=2,
+                        initial=0,
+                    ),
+                ],
+            ),
+            (
                 [(0, "0"), (1, "1")],
                 2,
                 "2",
                 [
                     _Modification(
+                        modification_type="root",
+                        initial=0,
+                        modified=1,
+                    ),
+                    _Modification(
+                        modification_type="greater",
+                        key=0,
+                        initial=1,
+                    ),
+                    _Modification(
+                        modification_type="lesser",
+                        key=1,
+                        modified=0,
+                    ),
+                    _Modification(
                         modification_type="greater",
                         key=1,
                         modified=2,
+                    ),
+                ],
+            ),
+            (
+                [(0, "0"), (2, "2")],
+                1,
+                "1",
+                [
+                    _Modification(
+                        modification_type="root",
+                        initial=0,
+                        modified=1,
+                    ),
+                    _Modification(
+                        modification_type="greater",
+                        key=0,
+                        initial=2,
+                    ),
+                ],
+            ),
+            (
+                [(3, "3"), (2, "2"), (4, "4"), (1, "1")],
+                0,
+                "0",
+                [
+                    _Modification(
+                        modification_type="lesser",
+                        key=3,
+                        initial=2,
+                        modified=1,
+                    ),
+                    _Modification(
+                        modification_type="lesser",
+                        key=2,
+                        initial=1,
+                    ),
+                    _Modification(
+                        modification_type="greater",
+                        key=1,
+                        modified=2,
+                    ),
+                    _Modification(
+                        modification_type="lesser",
+                        key=1,
+                        modified=0,
+                    ),
+                ],
+            ),
+            (
+                [(1, "1"), (0, "0"), (2, "2"), (3, "3")],
+                4,
+                "4",
+                [
+                    _Modification(
+                        modification_type="greater",
+                        key=1,
+                        initial=2,
+                        modified=3,
+                    ),
+                    _Modification(
+                        modification_type="greater",
+                        key=2,
+                        initial=3,
+                    ),
+                    _Modification(
+                        modification_type="lesser",
+                        key=3,
+                        modified=2,
+                    ),
+                    _Modification(
+                        modification_type="greater",
+                        key=3,
+                        modified=4,
                     ),
                 ],
             ),
@@ -262,28 +406,32 @@ class TestAvlTree:
 
     @staticmethod
     @pytest.mark.parametrize(
-        ("items", "key", "expected_modifications"),
+        ("items", "key", "expected_modifications", "expected_stack"),
         [
-            ([(0, "0")], 0, [_Modification(modification_type="root", initial=0)]),
+            ([(0, "0")], 0, [_Modification(modification_type="root", initial=0)], []),
             (
                 [(1, "1"), (0, "0")],
                 0,
                 [_Modification(modification_type="lesser", key=1, initial=0)],
+                [1],
             ),
             (
                 [(0, "0"), (1, "1")],
                 1,
                 [_Modification(modification_type="greater", key=0, initial=1)],
+                [0],
             ),
             (
                 [(1, "1"), (0, "0")],
                 1,
                 [_Modification(modification_type="root", initial=1, modified=0)],
+                [0],
             ),
             (
                 [(0, "0"), (1, "1")],
                 0,
                 [_Modification(modification_type="root", initial=0, modified=1)],
+                [1],
             ),
             (
                 [(1, "1"), (0, "0"), (2, "2")],
@@ -292,6 +440,7 @@ class TestAvlTree:
                     _Modification(modification_type="root", initial=1, modified=2),
                     _Modification(modification_type="lesser", key=2, modified=0),
                 ],
+                [2],
             ),
             (
                 [(1, "1"), (0, "0"), (3, "3"), (2, "2")],
@@ -302,26 +451,28 @@ class TestAvlTree:
                     _Modification(modification_type="greater", key=2, modified=3),
                     _Modification(modification_type="lesser", key=3, initial=2),
                 ],
+                [2, 3],
             ),
             (
-                [(1, "1"), (0, "0"), (4, "4"), (2, "2"), (3, "3")],
-                1,
+                [(2, "2"), (1, "1"), (5, "5"), (0, "0"), (3, "3"), (6, "6"), (4, "4")],
+                2,
                 [
-                    _Modification(modification_type="root", initial=1, modified=2),
-                    _Modification(modification_type="lesser", key=2, modified=0),
+                    _Modification(modification_type="root", initial=2, modified=3),
+                    _Modification(modification_type="lesser", key=3, modified=1),
                     _Modification(
                         modification_type="greater",
-                        key=2,
-                        initial=3,
-                        modified=4,
+                        key=3,
+                        initial=4,
+                        modified=5,
                     ),
                     _Modification(
                         modification_type="lesser",
-                        key=4,
-                        initial=2,
-                        modified=3,
+                        key=5,
+                        initial=3,
+                        modified=4,
                     ),
                 ],
+                [3, 5],
             ),
         ],
     )
@@ -329,6 +480,7 @@ class TestAvlTree:
         items: list[tuple[int, str]],
         key: int,
         expected_modifications: list[_Modification],
+        expected_stack: list[int],
     ) -> None:
         """Tests happy path cases of AvlTree.__delitem__().
 
@@ -337,6 +489,8 @@ class TestAvlTree:
             key (int): The key to delete from the AvlTree.
             expected_modifications (list[_Modification]): The expected modifications to
                 the AvlTree.
+            expected_stack (list[int]): The stack which is expected to be passed to
+                AvlTree.__enforce_avl.
         """
         initial_avl_tree: Final[AvlTree[int, str]] = _construct_avl_tree(items=items)
         modified_avl_tree: Final[AvlTree[int, str]] = _copy_avl_tree(
@@ -346,6 +500,11 @@ class TestAvlTree:
             getattr(modified_avl_tree, "_AvlTree__nodes"),  # noqa: B009
         ).contains_key(
             key,
+        )
+        setattr(  # noqa: B010
+            modified_avl_tree,
+            "_AvlTree__enforce_avl",
+            lambda stack: assert_that(stack).is_equal_to(expected_stack),
         )
         del modified_avl_tree[key]
         assert_that(

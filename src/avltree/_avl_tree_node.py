@@ -28,6 +28,7 @@ class AvlTreeNode(Generic[_K, _V]):
         self.__value: _V = value
         self.__lesser_child_key: _K | None = None
         self.__greater_child_key: _K | None = None
+        self.__height: int = 0
 
     @property
     def value(self) -> _V:
@@ -82,3 +83,21 @@ class AvlTreeNode(Generic[_K, _V]):
             greater_child_key (_K | None): The key of the greater child of this node.
         """
         self.__greater_child_key = greater_child_key
+
+    @property
+    def height(self) -> int:
+        """Gets the height of this node.
+
+        Returns:
+            int: The height of this node.
+        """
+        return self.__height
+
+    @height.setter
+    def height(self, height: int) -> None:
+        """Sets the height of this node.
+
+        Args:
+            height (int): The height of this node.
+        """
+        self.__height = height
