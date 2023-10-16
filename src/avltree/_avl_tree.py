@@ -17,10 +17,13 @@ class AvlTree(MutableMapping[_K, _V]):
     This class implements the MutableMapping interface.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, initial_items: dict[_K, _V] | None = None) -> None:
         """Constructor."""
         self.__nodes: Final[dict[_K, AvlTreeNode[_K, _V]]] = {}
         self.__root_key: _K | None = None
+        if initial_items is not None:
+            for key, value in initial_items.items():
+                self[key] = value
 
     def __setitem__(self, __k: _K, __v: _V) -> None:
         """Maps the given key to the given value in this tree.

@@ -196,6 +196,21 @@ class TestAvlTree:
     """Unit tests for AvlTree."""
 
     @staticmethod
+    @pytest.mark.parametrize("initial_items", [None, {}, {0: "0"}, {0: "0", 1: "1"}])
+    def test_init(initial_items: dict[int, str] | None) -> None:
+        """Tests happy path cases of AvlTree.__init__().
+
+        Args:
+            initial_items (dict[int, str] | None): The initial items to pass into the
+                constructor.
+        """
+        avl_tree: Final[AvlTree[int, str]] = AvlTree(initial_items=initial_items)
+        if initial_items is None:
+            assert_that(list(avl_tree)).is_empty()
+        else:
+            assert_that(list(avl_tree)).is_equal_to(sorted(initial_items.keys()))
+
+    @staticmethod
     @pytest.mark.parametrize(
         ("items", "key", "value", "expected_modifications"),
         [
