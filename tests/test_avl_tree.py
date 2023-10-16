@@ -3,6 +3,7 @@
 from __future__ import annotations  # noqa: I001
 
 from dataclasses import dataclass
+from random import shuffle
 from typing import Final, Literal
 
 import pytest
@@ -154,6 +155,41 @@ def _get_modifications(
                 ),
             )
     return modifications
+
+
+def assert_avl_tree_shape(avl_tree: AvlTree[int, str], keys: list[int]) -> None:
+    """Asserts that the given AvlTree has a valid AVL shape.
+
+    Args:
+        avl_tree (AvlTree[int, str]): The AvlTree to validate.
+        keys (list[int]): The keys which should be present in the tree.
+
+    Raises:
+        AssertionError: If the keys are in the incorrect order or if the tree does not
+            have a valid AVL shape.
+    """
+    assert_that(list(avl_tree)).is_equal_to(sorted(keys))
+    nodes: dict[int, AvlTreeNode[int, str]] = getattr(  # noqa: B009
+        avl_tree,
+        "_AvlTree__nodes",
+    )
+    for node in nodes.values():
+        assert_that(
+            getattr(avl_tree, "_AvlTree__calculate_balance")(  # noqa: B009
+                node=node,
+            ),
+        ).is_between(-1, 1)
+        assert_that(
+            1
+            + max(
+                -1
+                if node.lesser_child_key is None
+                else nodes[node.lesser_child_key].height,
+                -1
+                if node.greater_child_key is None
+                else nodes[node.greater_child_key].height,
+            ),
+        ).is_equal_to(node.height)
 
 
 class TestAvlTree:
@@ -656,3 +692,16 @@ class TestAvlTree:
             match=r"Cannot get the maximum of an empty AvlTree",
         ):
             avl_tree.maximum()
+
+    @staticmethod
+    def test_large_scale() -> None:
+        """Tests a large scale case of adding and deleting many items."""
+        keys: Final[list[int]] = list(range(1000))
+        shuffle(keys)
+        avl_tree: Final[AvlTree[int, str]] = AvlTree()
+        for i, key in enumerate(keys):
+            avl_tree[key] = str(key)
+            assert_avl_tree_shape(avl_tree=avl_tree, keys=keys[: i + 1])
+        for i, key in enumerate(keys):
+            del avl_tree[key]
+            assert_avl_tree_shape(avl_tree=avl_tree, keys=keys[i + 1 :])

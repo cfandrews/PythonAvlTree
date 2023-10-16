@@ -92,6 +92,7 @@ select = [
 ]
 ignore = [
     "ANN101", # Missing type annotation for `self` in method
+    "E203",   # Whitespace before ':'
 ]
 preview = true
 
