@@ -165,6 +165,14 @@ class AvlTree(MutableMapping[_K, _V]):
         """
         return self.between()
 
+    def __repr__(self) -> str:
+        """Builds a developer-friendly string representation of this AvlTree.
+
+        Returns:
+            str: A string representation of this AvlTree.
+        """
+        return f"AvlTree({{{', '.join(f'{k!r}: {v!r}' for k, v in self.items())}}})"
+
     def minimum(self) -> _K:
         """Gets the minimum key contained in this tree.
 

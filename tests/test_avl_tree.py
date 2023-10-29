@@ -770,3 +770,22 @@ class TestAvlTree:
                 ),
             ),
         ).is_equal_to(expected_keys)
+
+    @staticmethod
+    @pytest.mark.parametrize(
+        ("items", "expected_repr"),
+        [
+            ({}, "AvlTree({})"),
+            ({1: "1", 2: "2", 0: "0"}, "AvlTree({0: '0', 1: '1', 2: '2'})"),
+        ],
+    )
+    def test_repr(items: dict[int, str], expected_repr: str) -> None:
+        """Tests happy path cases of AvlTree.__repr__().
+
+        Args:
+            items (dict[int, str]): The initial items in the AvlTree.
+            expected_repr (str): The expected string representation of the AvlTree.
+        """
+        assert_that(repr(AvlTree[int, str](initial_items=items))).is_equal_to(
+            expected_repr,
+        )
