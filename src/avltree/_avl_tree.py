@@ -18,7 +18,12 @@ class AvlTree(MutableMapping[_K, _V]):
     """
 
     def __init__(self, initial_items: dict[_K, _V] | None = None) -> None:
-        """Constructor."""
+        """Constructor.
+
+        Args:
+            initial_items (dict[_K, _V] | None): An optional initial mapping of items to
+                add to this tree. Defaults to None.
+        """
         self.__nodes: Final[dict[_K, AvlTreeNode[_K, _V]]] = {}
         self.__root_key: _K | None = None
         if initial_items is not None:
@@ -158,20 +163,7 @@ class AvlTree(MutableMapping[_K, _V]):
         Returns:
             Iterator[_K]: The iterator object.
         """
-        if self.__root_key is None:
-            return
-        stack: Final[list[tuple[_K, bool]]] = [(self.__root_key, False)]
-        while len(stack) > 0:
-            key, lesser_child_visited = stack.pop(-1)
-            node: AvlTreeNode[_K, _V] = self.__nodes[key]
-            if node.lesser_child_key is not None and not lesser_child_visited:
-                stack.append((key, True))
-                stack.append((node.lesser_child_key, False))
-            elif node.greater_child_key is not None:
-                stack.append((node.greater_child_key, False))
-                yield key
-            else:
-                yield key
+        return self.between()
 
     def minimum(self) -> _K:
         """Gets the minimum key contained in this tree.
@@ -208,6 +200,67 @@ class AvlTree(MutableMapping[_K, _V]):
             key = node.greater_child_key
             node = self.__nodes[key]
         return key
+
+    def between(  # noqa: C901, PLR0912
+        self,
+        start: _K | None = None,
+        stop: _K | None = None,
+        treatment: Literal["inclusive", "exclusive"] = "inclusive",
+    ) -> Iterator[_K]:
+        """Iterates over all keys between the given start and stop in sort order.
+
+        Args:
+            start (_K | None): The key at which to start iterating. If None, iteration
+                starts at the minimum key. Defaults to None.
+            stop (_K | None): The key at which to stop iterating. If None, iteration
+                stops at the maximum key. Defaults to None.
+            treatment (Literal["inclusive", "exclusive"]): Whether the given start and
+                stop should be included or excluded from the returned iterator. Has no
+                effect when start and stop are None. Defaults to "inclusive".
+
+        Returns:
+            Iterator[_K]: An iterator which will iterate over all keys between the given
+                start and stop.
+        """
+        if self.__root_key is None:
+            return
+        stack: Final[list[tuple[_K, bool]]] = []
+        current_key: _K = self.__root_key
+        while True:
+            current_node: AvlTreeNode[_K, _V] = self.__nodes[current_key]
+            if start is None or start < current_key:
+                stack.append((current_key, True))
+                if current_node.lesser_child_key is not None:
+                    current_key = current_node.lesser_child_key
+                else:
+                    break
+            elif start == current_key:
+                if treatment == "inclusive":
+                    stack.append((current_key, True))
+                    break
+                elif current_node.greater_child_key is not None:
+                    current_key = current_node.greater_child_key
+                else:
+                    break
+            elif current_node.greater_child_key is not None:
+                current_key = current_node.greater_child_key
+            else:
+                break
+        while len(stack) > 0:
+            key, lesser_child_visited = stack.pop(-1)
+            if stop is not None and (
+                stop < key or (stop == key and treatment == "exclusive")
+            ):
+                break
+            node: AvlTreeNode[_K, _V] = self.__nodes[key]
+            if node.lesser_child_key is not None and not lesser_child_visited:
+                stack.append((key, True))
+                stack.append((node.lesser_child_key, False))
+            elif node.greater_child_key is not None:
+                stack.append((node.greater_child_key, False))
+                yield key
+            else:
+                yield key
 
     def __get_closer_key(self, key: _K, current_key: _K) -> _K:
         """Gets the next closest key to the given key.

@@ -5,27 +5,13 @@ from __future__ import annotations  # noqa: I001
 from dataclasses import dataclass
 from random import shuffle
 from typing import Final, Literal
+from unittest.mock import Mock
 
 import pytest
 from assertpy import assert_that
 
 from avltree import AvlTree
 from avltree._avl_tree_node import AvlTreeNode
-
-
-def _construct_avl_tree(items: list[tuple[int, str]]) -> AvlTree[int, str]:
-    """Constructs an AvlTree containing the given items inserted in the given order.
-
-    Args:
-        items (list[tuple[int, str]]): The items to add to the AvlTree.
-
-    Returns:
-        AvlTree[int, str]: The AvlTree.
-    """
-    avl_tree: Final[AvlTree[int, str]] = AvlTree[int, str]()
-    for key, value in items:
-        avl_tree[key] = value
-    return avl_tree
 
 
 def _copy_avl_tree(avl_tree: AvlTree[int, str]) -> AvlTree[int, str]:
@@ -214,9 +200,9 @@ class TestAvlTree:
     @pytest.mark.parametrize(
         ("items", "key", "value", "expected_modifications"),
         [
-            ([], 0, "0", [_Modification(modification_type="root", modified=0)]),
+            ({}, 0, "0", [_Modification(modification_type="root", modified=0)]),
             (
-                [(0, "0")],
+                {0: "0"},
                 0,
                 "1",
                 [
@@ -229,7 +215,7 @@ class TestAvlTree:
                 ],
             ),
             (
-                [(1, "1")],
+                {1: "1"},
                 0,
                 "0",
                 [
@@ -241,7 +227,7 @@ class TestAvlTree:
                 ],
             ),
             (
-                [(0, "0")],
+                {0: "0"},
                 1,
                 "1",
                 [
@@ -253,7 +239,7 @@ class TestAvlTree:
                 ],
             ),
             (
-                [(2, "2"), (1, "1"), (3, "3")],
+                {2: "2", 1: "1", 3: "3"},
                 0,
                 "0",
                 [
@@ -265,7 +251,7 @@ class TestAvlTree:
                 ],
             ),
             (
-                [(1, "1"), (0, "0"), (2, "2")],
+                {1: "1", 0: "0", 2: "2"},
                 3,
                 "3",
                 [
@@ -277,7 +263,7 @@ class TestAvlTree:
                 ],
             ),
             (
-                [(2, "2"), (1, "1")],
+                {2: "2", 1: "1"},
                 0,
                 "0",
                 [
@@ -304,7 +290,7 @@ class TestAvlTree:
                 ],
             ),
             (
-                [(2, "2"), (0, "0")],
+                {2: "2", 0: "0"},
                 1,
                 "1",
                 [
@@ -321,7 +307,7 @@ class TestAvlTree:
                 ],
             ),
             (
-                [(0, "0"), (1, "1")],
+                {0: "0", 1: "1"},
                 2,
                 "2",
                 [
@@ -348,7 +334,7 @@ class TestAvlTree:
                 ],
             ),
             (
-                [(0, "0"), (2, "2")],
+                {0: "0", 2: "2"},
                 1,
                 "1",
                 [
@@ -365,7 +351,7 @@ class TestAvlTree:
                 ],
             ),
             (
-                [(3, "3"), (2, "2"), (4, "4"), (1, "1")],
+                {3: "3", 2: "2", 4: "4", 1: "1"},
                 0,
                 "0",
                 [
@@ -393,7 +379,7 @@ class TestAvlTree:
                 ],
             ),
             (
-                [(1, "1"), (0, "0"), (2, "2"), (3, "3")],
+                {1: "1", 0: "0", 2: "2", 3: "3"},
                 4,
                 "4",
                 [
@@ -423,7 +409,7 @@ class TestAvlTree:
         ],
     )
     def test_setitem(
-        items: list[tuple[int, str]],
+        items: dict[int, str],
         key: int,
         value: str,
         expected_modifications: list[_Modification],
@@ -437,7 +423,9 @@ class TestAvlTree:
             expected_modifications (list[_Modification]): The expected modifications to
                 the AvlTree.
         """
-        initial_avl_tree: Final[AvlTree[int, str]] = _construct_avl_tree(items=items)
+        initial_avl_tree: Final[AvlTree[int, str]] = AvlTree[int, str](
+            initial_items=items,
+        )
         modified_avl_tree: Final[AvlTree[int, str]] = _copy_avl_tree(
             avl_tree=initial_avl_tree,
         )
@@ -459,33 +447,33 @@ class TestAvlTree:
     @pytest.mark.parametrize(
         ("items", "key", "expected_modifications", "expected_stack"),
         [
-            ([(0, "0")], 0, [_Modification(modification_type="root", initial=0)], []),
+            ({0: "0"}, 0, [_Modification(modification_type="root", initial=0)], []),
             (
-                [(1, "1"), (0, "0")],
+                {1: "1", 0: "0"},
                 0,
                 [_Modification(modification_type="lesser", key=1, initial=0)],
                 [1],
             ),
             (
-                [(0, "0"), (1, "1")],
+                {0: "0", 1: "1"},
                 1,
                 [_Modification(modification_type="greater", key=0, initial=1)],
                 [0],
             ),
             (
-                [(1, "1"), (0, "0")],
+                {1: "1", 0: "0"},
                 1,
                 [_Modification(modification_type="root", initial=1, modified=0)],
                 [0],
             ),
             (
-                [(0, "0"), (1, "1")],
+                {0: "0", 1: "1"},
                 0,
                 [_Modification(modification_type="root", initial=0, modified=1)],
                 [1],
             ),
             (
-                [(1, "1"), (0, "0"), (2, "2")],
+                {1: "1", 0: "0", 2: "2"},
                 1,
                 [
                     _Modification(modification_type="root", initial=1, modified=2),
@@ -494,7 +482,7 @@ class TestAvlTree:
                 [2],
             ),
             (
-                [(1, "1"), (0, "0"), (3, "3"), (2, "2")],
+                {1: "1", 0: "0", 3: "3", 2: "2"},
                 1,
                 [
                     _Modification(modification_type="root", initial=1, modified=2),
@@ -505,7 +493,7 @@ class TestAvlTree:
                 [2, 3],
             ),
             (
-                [(2, "2"), (1, "1"), (5, "5"), (0, "0"), (3, "3"), (6, "6"), (4, "4")],
+                {2: "2", 1: "1", 5: "5", 0: "0", 3: "3", 6: "6", 4: "4"},
                 2,
                 [
                     _Modification(modification_type="root", initial=2, modified=3),
@@ -528,7 +516,7 @@ class TestAvlTree:
         ],
     )
     def test_delitem(
-        items: list[tuple[int, str]],
+        items: dict[int, str],
         key: int,
         expected_modifications: list[_Modification],
         expected_stack: list[int],
@@ -543,7 +531,9 @@ class TestAvlTree:
             expected_stack (list[int]): The stack which is expected to be passed to
                 AvlTree.__enforce_avl.
         """
-        initial_avl_tree: Final[AvlTree[int, str]] = _construct_avl_tree(items=items)
+        initial_avl_tree: Final[AvlTree[int, str]] = AvlTree[int, str](
+            initial_items=items,
+        )
         modified_avl_tree: Final[AvlTree[int, str]] = _copy_avl_tree(
             avl_tree=initial_avl_tree,
         )
@@ -572,15 +562,15 @@ class TestAvlTree:
             assert_that(actual_modifications).contains(modification)
 
     @staticmethod
-    @pytest.mark.parametrize(("items", "key"), [([], 0), ([(0, "0")], 1)])
-    def test_delitem_key_error(items: list[tuple[int, str]], key: int) -> None:
+    @pytest.mark.parametrize(("items", "key"), [({}, 0), ({0: "0"}, 1)])
+    def test_delitem_key_error(items: dict[int, str], key: int) -> None:
         """Tests KeyError cases of AvlTree.__delitem__().
 
         Args:
             items (list[tuple[int, str]]): The initial items in the AvlTree.
             key (int): The key to delete from the AvlTree.
         """
-        avl_tree: Final[AvlTree[int, str]] = _construct_avl_tree(items=items)
+        avl_tree: Final[AvlTree[int, str]] = AvlTree[int, str](initial_items=items)
         assert_that(
             getattr(avl_tree, "_AvlTree__nodes"),  # noqa: B009
         ).does_not_contain_key(
@@ -593,12 +583,12 @@ class TestAvlTree:
     @pytest.mark.parametrize(
         ("items", "key", "value"),
         [
-            ([(0, "0")], 0, "0"),
-            ([(1, "1"), (0, "0")], 0, "0"),
-            ([(0, "0"), (1, "1")], 1, "1"),
+            ({0: "0"}, 0, "0"),
+            ({1: "1", 0: "0"}, 0, "0"),
+            ({0: "0", 1: "1"}, 1, "1"),
         ],
     )
-    def test_getitem(items: list[tuple[int, str]], key: int, value: str) -> None:
+    def test_getitem(items: dict[int, str], key: int, value: str) -> None:
         """Tests happy path cases of AvlTree.__getitem__().
 
         Args:
@@ -606,71 +596,59 @@ class TestAvlTree:
             key (int): The key to get.
             value (str): The value to expect.
         """
-        avl_tree: Final[AvlTree[int, str]] = _construct_avl_tree(items=items)
+        avl_tree: Final[AvlTree[int, str]] = AvlTree[int, str](initial_items=items)
         assert_that(avl_tree[key]).is_equal_to(value)
 
     @staticmethod
-    @pytest.mark.parametrize(("items", "key"), [([], 0), ([(0, "0")], 1)])
-    def test_getitem_key_error(items: list[tuple[int, str]], key: int) -> None:
+    @pytest.mark.parametrize(("items", "key"), [({}, 0), ({0: "0"}, 1)])
+    def test_getitem_key_error(items: dict[int, str], key: int) -> None:
         """Tests KeyError cases of AvlTree.__getitem__().
 
         Args:
             items (list[tuple[int, str]]): The initial items in the AvlTree.
             key (int): The key to get.
         """
-        avl_tree: Final[AvlTree[int, str]] = _construct_avl_tree(items=items)
+        avl_tree: Final[AvlTree[int, str]] = AvlTree[int, str](initial_items=items)
         with pytest.raises(KeyError):
             avl_tree[key]
 
     @staticmethod
     @pytest.mark.parametrize(
         ("items", "length"),
-        [([], 0), ([(0, "0")], 1), ([(0, "0"), (1, "1")], 2)],
+        [({}, 0), ({0: "0"}, 1), ({0: "0", 1: "1"}, 2)],
     )
-    def test_len(items: list[tuple[int, str]], length: int) -> None:
+    def test_len(items: dict[int, str], length: int) -> None:
         """Tests happy path cases of AvlTree.__len__().
 
         Args:
             items (list[tuple[int, str]]): The initial items in the AvlTree.
             length (int): The expected length of the AvlTree.
         """
-        avl_tree: Final[AvlTree[int, str]] = _construct_avl_tree(items=items)
+        avl_tree: Final[AvlTree[int, str]] = AvlTree[int, str](initial_items=items)
         assert_that(avl_tree).is_length(length)
 
     @staticmethod
-    @pytest.mark.parametrize(
-        ("items", "sorted_keys"),
-        [
-            ([], []),
-            ([(0, "0")], [0]),
-            ([(1, "1"), (0, "0")], [0, 1]),
-            ([(0, "0"), (1, "1")], [0, 1]),
-            ([(1, "1"), (0, "0"), (2, "2")], [0, 1, 2]),
-        ],
-    )
-    def test_iter(items: list[tuple[int, str]], sorted_keys: list[int]) -> None:
-        """Tests happy path cases of AvlTree.__iter__().
-
-        Args:
-            items (list[tuple[int, str]]): The initial items in the AvlTree.
-            sorted_keys (list[int]): The expected keys in sort order.
-        """
-        avl_tree: Final[AvlTree[int, str]] = _construct_avl_tree(items=items)
-        assert_that(list(avl_tree)).is_equal_to(sorted_keys)
+    def test_iter() -> None:
+        """Tests happy path cases of AvlTree.__iter__()."""
+        avl_tree: Final[AvlTree[int, str]] = AvlTree[int, str]()
+        between_mock: Mock = Mock()
+        setattr(avl_tree, "between", between_mock)  # noqa: B010
+        avl_tree.__iter__()
+        between_mock.assert_called_once_with()
 
     @staticmethod
     @pytest.mark.parametrize(
         ("items", "minimum"),
-        [([(0, "0")], 0), ([(1, "1"), (0, "0")], 0)],
+        [({0: "0"}, 0), ({1: "1", 0: "0"}, 0)],
     )
-    def test_minimum(items: list[tuple[int, str]], minimum: int) -> None:
+    def test_minimum(items: dict[int, str], minimum: int) -> None:
         """Tests happy path cases of AvlTree.minimum().
 
         Args:
             items (list[tuple[int, str]]): The initial items in the AvlTree.
             minimum (int): The expected minimum of the AvlTree.
         """
-        avl_tree: Final[AvlTree[int, str]] = _construct_avl_tree(items=items)
+        avl_tree: Final[AvlTree[int, str]] = AvlTree[int, str](initial_items=items)
         assert_that(avl_tree.minimum()).is_equal_to(minimum)
 
     @staticmethod
@@ -686,16 +664,16 @@ class TestAvlTree:
     @staticmethod
     @pytest.mark.parametrize(
         ("items", "maximum"),
-        [([(0, "0")], 0), ([(0, "0"), (1, "1")], 1)],
+        [({0: "0"}, 0), ({0: "0", 1: "1"}, 1)],
     )
-    def test_maximum(items: list[tuple[int, str]], maximum: int) -> None:
+    def test_maximum(items: dict[int, str], maximum: int) -> None:
         """Tests happy path cases of AvlTree.maximum().
 
         Args:
             items (list[tuple[int, str]]): The initial items in the AvlTree.
             maximum (int): The expected maximum of the AvlTree.
         """
-        avl_tree: Final[AvlTree[int, str]] = _construct_avl_tree(items=items)
+        avl_tree: Final[AvlTree[int, str]] = AvlTree[int, str](initial_items=items)
         assert_that(avl_tree.maximum()).is_equal_to(maximum)
 
     @staticmethod
@@ -713,10 +691,82 @@ class TestAvlTree:
         """Tests a large scale case of adding and deleting many items."""
         keys: Final[list[int]] = list(range(1000))
         shuffle(keys)
-        avl_tree: Final[AvlTree[int, str]] = AvlTree()
+        avl_tree: Final[AvlTree[int, str]] = AvlTree[int, str]()
         for i, key in enumerate(keys):
             avl_tree[key] = str(key)
             assert_avl_tree_shape(avl_tree=avl_tree, keys=keys[: i + 1])
         for i, key in enumerate(keys):
             del avl_tree[key]
             assert_avl_tree_shape(avl_tree=avl_tree, keys=keys[i + 1 :])
+
+    @staticmethod
+    @pytest.mark.parametrize(
+        ("items", "start", "stop", "treatment", "expected_keys"),
+        [
+            ({}, None, None, "inclusive", []),
+            ({1: "1", 0: "0", 2: "2"}, None, None, "inclusive", [0, 1, 2]),
+            ({1: "1", 0: "0", 2: "2"}, None, 1, "inclusive", [0, 1]),
+            ({1: "1", 0: "0", 2: "2"}, None, 2, "exclusive", [0, 1]),
+            (
+                {4: "4", 2: "2", 5: "5", 0: "0", 3: "3", 6: "6", 1: "1"},
+                0,
+                None,
+                "inclusive",
+                [0, 1, 2, 3, 4, 5, 6],
+            ),
+            (
+                {4: "4", 2: "2", 5: "5", 0: "0", 3: "3", 6: "6", 1: "1"},
+                0,
+                None,
+                "exclusive",
+                [1, 2, 3, 4, 5, 6],
+            ),
+            (
+                {4: "4", 2: "2", 5: "5", 0: "0", 3: "3", 6: "6", 1: "1"},
+                3,
+                None,
+                "exclusive",
+                [4, 5, 6],
+            ),
+            (
+                {4: "4", 2: "2", 5: "5", 0: "0", 3: "3", 6: "6", 1: "1"},
+                -1,
+                None,
+                "inclusive",
+                [0, 1, 2, 3, 4, 5, 6],
+            ),
+            (
+                {4: "4", 2: "2", 5: "5", 0: "0", 3: "3", 6: "6", 1: "1"},
+                7,
+                None,
+                "inclusive",
+                [],
+            ),
+        ],
+    )
+    def test_between(
+        items: dict[int, str],
+        start: int | None,
+        stop: int | None,
+        treatment: Literal["inclusive", "exclusive"],
+        expected_keys: list[int],
+    ) -> None:
+        """Tests happy path cases of AvlTree.between().
+
+        Args:
+            items (dict[int, str]): The initial items in the AvlTree.
+            start (int | None): The key at which to start iterating.
+            stop (int | None): The key at which to stop iterating.
+            treatment (Literal["inclusive", "exclusive"]): Whether the given start and
+                stop should be included or excluded from the returned iterator.
+            expected_keys (list[int]): The expected keys in order.
+        """
+        assert_that(
+            list(
+                AvlTree[int, str](initial_items=items).between(
+                    start=start,
+                    stop=stop,
+                    treatment=treatment,
+                ),
+            ),
+        ).is_equal_to(expected_keys)
