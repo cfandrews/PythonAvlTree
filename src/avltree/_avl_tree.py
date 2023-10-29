@@ -2,7 +2,7 @@
 """Contains the AvlTree class."""
 from __future__ import annotations
 
-from typing import Final, Iterator, Literal, MutableMapping, TypeVar, cast
+from typing import Final, Iterator, Literal, Mapping, MutableMapping, TypeVar, cast
 
 from ._avl_tree_key import AvlTreeKey
 from ._avl_tree_node import AvlTreeNode
@@ -17,17 +17,17 @@ class AvlTree(MutableMapping[_K, _V]):
     This class implements the MutableMapping interface.
     """
 
-    def __init__(self, initial_items: dict[_K, _V] | None = None) -> None:
+    def __init__(self, mapping: Mapping[_K, _V] | None = None) -> None:
         """Constructor.
 
         Args:
-            initial_items (dict[_K, _V] | None): An optional initial mapping of items to
-                add to this tree. Defaults to None.
+            mapping (dict[_K, _V] | None): An optional initial mapping of items to add
+                to this tree. Defaults to None.
         """
         self.__nodes: Final[dict[_K, AvlTreeNode[_K, _V]]] = {}
         self.__root_key: _K | None = None
-        if initial_items is not None:
-            for key, value in initial_items.items():
+        if mapping is not None:
+            for key, value in mapping.items():
                 self[key] = value
 
     def __setitem__(self, __k: _K, __v: _V) -> None:
