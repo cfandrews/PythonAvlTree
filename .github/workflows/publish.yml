@@ -19,7 +19,7 @@ jobs:
       - name: Python Setup
         uses: actions/setup-python@v3
         with:
-          python-version: '3.8'
+          python-version: 3.11
       - name: Build
         run: |
           bash build.sh
