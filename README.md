@@ -1,6 +1,7 @@
 # Python AVL Tree
 [![Stable Version](https://img.shields.io/pypi/v/avltree?color=blue)](https://pypi.org/project/avltree/)
 [![Build Status](https://github.com/cfandrews/PythonAvlTree/actions/workflows/build.yml/badge.svg)](https://github.com/cfandrews/PythonAvlTree/actions)
+[![Documentation Status](https://github.com/cfandrews/PythonAvlTree/actions/workflows/documentation.yml/badge.svg)](https://github.com/cfandrews/PythonAvlTree/actions)
 [![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 [![Linting: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
@@ -9,7 +10,8 @@ search trees, giving them both amortized and worst-case time complexities of O[l
 retrieval. More reference can be found on the [AVL tree Wikipedia page](https://en.wikipedia.org/wiki/AVL_tree).
 
 [PyPI](https://pypi.org/project/avltree/)\
-[Source](https://github.com/cfandrews/PythonAvlTree)
+[Source](https://github.com/cfandrews/PythonAvlTree)\
+[Documentation](https://cfandrews.github.io/PythonAvlTree/avltree.html)
 
 ## Installation
 This package is available on PyPI and can be installed with pip:
@@ -19,9 +21,10 @@ pip install avltree
 
 ## Documentation
 ### Usage
-The `AvlTree` class implements the [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
-generic interface and can be used in (almost) the exact same way as the [`dict`](https://docs.python.org/3/library/stdtypes.html#mapping-types-dict)
-built-in collection.
+The [`AvlTree`](https://cfandrews.github.io/PythonAvlTree/avltree.html#AvlTree) class implements the
+[`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping) generic
+interface and can be used in (almost) the exact same way as the
+[`dict`](https://docs.python.org/3/library/stdtypes.html#mapping-types-dict) built-in collection.
 
 Basic dictionary-esque usage looks like:
 ```python
@@ -45,8 +48,8 @@ print(avl_tree)
 # AvlTree({0: 'a', 1: 'b', 2: 'c'})
 ```
 
-Unlike dictionaries, the keys of an `AvlTree` instance can be iterated on in sort-order, and all methods which return
-iterators are guaranteed to be sorted by key:
+Unlike dictionaries, the keys of an [`AvlTree`](https://cfandrews.github.io/PythonAvlTree/avltree.html#AvlTree) instance
+can be iterated on in sort-order, and all methods which return iterators are guaranteed to be sorted by key:
 ```python
 from avltree import AvlTree
 avl_tree: AvlTree[int, str] = AvlTree[int, str]({2: "c", 1: "b", 0: "a"})
@@ -69,8 +72,8 @@ for key, value in avl_tree.items():
 # 2 c
 ```
 
-`AvlTree` instances also have helper methods for retrieving the minimum and maximum keys and performing inequality
-operations on the set of all keys:
+[`AvlTree`](https://cfandrews.github.io/PythonAvlTree/avltree.html#AvlTree) instances also have helper methods for
+retrieving the minimum and maximum keys and performing inequality operations on the set of all keys:
 ```python
 from avltree import AvlTree
 avl_tree: AvlTree[int, str] = AvlTree[int, str](
@@ -98,8 +101,8 @@ for key in avl_tree.between(start=0, stop=4, treatment="inclusive"):
 ```
 
 ### Keys
-Anything used as a key in an `AvlTree` must implement `__eq__`, `__hash__`, and `__lt__`. That is to say they must be
-immutable and have a less-than comparison.
+Anything used as a key in an [`AvlTree`](https://cfandrews.github.io/PythonAvlTree/avltree.html#AvlTree) must implement
+`__eq__`, `__hash__`, and `__lt__`. That is to say they must be immutable and have a less-than comparison.
 
 It's recommended to only insert keys which are all the same type, ensuring that they have a well-ordering. However,
 keys of different types can be inserted as long as their `__eq__` and `__lt__` methods behave.
@@ -111,5 +114,6 @@ implemented properly.
 Values can be any Python object.
 
 ### Recursion
-The `AvlTree` class does not use recursive techniques. This ensures that this package can be used on platforms with low
-recursion limits, even in scenarios with very large and very deep trees.
+The [`AvlTree`](https://cfandrews.github.io/PythonAvlTree/avltree.html#AvlTree) class does not use recursive techniques.
+This ensures that this package can be used on platforms with low recursion limits, even in scenarios with very large and
+very deep trees.

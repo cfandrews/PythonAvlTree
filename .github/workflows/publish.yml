@@ -1,4 +1,4 @@
-name: Upload Python Package
+name: PyPI
 
 on:
   release:
@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   pypi-publish:
-    name: Publish to PyPI
+    name: PyPI
     runs-on: ubuntu-latest
     environment: publish
     permissions:
