@@ -284,12 +284,14 @@ class AvlTree(MutableMapping[_K, _V]):
                 break
         while len(stack) > 0:
             key, lesser_child_visited = stack.pop(-1)
-            if stop is not None and (
-                stop < key or (stop == key and treatment == "exclusive")
+            node: AvlTreeNode[_K, _V] = self.__nodes[key]
+            if (
+                stop is not None  # noqa: PLR0916
+                and (stop < key or (stop == key and treatment == "exclusive"))
+                and (lesser_child_visited or node.lesser_child_key is None)
             ):
                 break
-            node: AvlTreeNode[_K, _V] = self.__nodes[key]
-            if node.lesser_child_key is not None and not lesser_child_visited:
+            elif node.lesser_child_key is not None and not lesser_child_visited:
                 stack.append((key, True))
                 stack.append((node.lesser_child_key, False))
             elif node.greater_child_key is not None:

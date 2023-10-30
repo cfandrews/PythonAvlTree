@@ -1,8 +1,6 @@
 {% extends "default/module.html.jinja2" %}
 {% macro is_public(doc) %}
-    {% if doc.qualname == "avltree" %}
-        false
-    {% elif doc.qualname == "AvlTree.__getitem__" %}
+    {% if doc.qualname == "AvlTree.__getitem__" %}
         true
     {% elif doc.qualname == "AvlTree.__setitem__" %}
         true

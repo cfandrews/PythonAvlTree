@@ -11,7 +11,7 @@ jobs:
   pypi-publish:
     name: PyPI
     runs-on: ubuntu-latest
-    environment: publish
+    environment: PyPI
     permissions:
       id-token: write
     steps:

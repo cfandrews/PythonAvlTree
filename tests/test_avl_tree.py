@@ -742,6 +742,13 @@ class TestAvlTree:
                 "inclusive",
                 [],
             ),
+            (
+                {2: "2", 1: "1", 4: "4", 0: "0", 3: "3", 5: "5"},
+                0,
+                4,
+                "exclusive",
+                [1, 2, 3],
+            ),
         ],
     )
     def test_between(

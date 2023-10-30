@@ -11,7 +11,7 @@ permissions:
 jobs:
   documentation:
     environment:
-      name: github-pages
+      name: Documentation
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
