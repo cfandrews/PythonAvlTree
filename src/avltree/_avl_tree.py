@@ -14,11 +14,18 @@ _V = TypeVar("_V", bound=object)
 class AvlTree(MutableMapping[_K, _V]):
     """Lightweight, pure-python AVL tree.
 
-    This class implements the MutableMapping interface.
+    This class implements the MutableMapping interface and can be used in almost every
+    way that a built-in dictionary can. See README for code examples.
+
+    In the time complexity expressions in method docstrings, n refers to the total
+    number of elements in the tree.
     """
 
     def __init__(self, mapping: Mapping[_K, _V] | None = None) -> None:
         """Constructor.
+
+        Inserting the elements of a passed-in mapping has an amortized and worst-case
+        time complexity of O[n*log(n)].
 
         Args:
             mapping (dict[_K, _V] | None): An optional initial mapping of items to add
@@ -32,6 +39,8 @@ class AvlTree(MutableMapping[_K, _V]):
 
     def __setitem__(self, __k: _K, __v: _V) -> None:
         """Maps the given key to the given value in this tree.
+
+        This method has an amortized and worst-case time complexity of O[log(n)].
 
         Args:
             __k (_K): The key to map.
@@ -65,6 +74,8 @@ class AvlTree(MutableMapping[_K, _V]):
 
     def __delitem__(self, __k: _K) -> None:  # noqa: C901, PLR0912
         """Deletes the given key from this tree.
+
+        This method has an amortized and worst-case time complexity of O[log(n)].
 
         Args:
             __k (_K): The key to delete from this tree.
@@ -130,6 +141,8 @@ class AvlTree(MutableMapping[_K, _V]):
     def __getitem__(self, __k: _K) -> _V:
         """Gets the value associated with the given key.
 
+        This method has an amortized and worst-case time complexity of O[log(n)].
+
         Args:
             __k (_K): The key.
 
@@ -152,6 +165,8 @@ class AvlTree(MutableMapping[_K, _V]):
     def __len__(self) -> int:
         """Returns the number of items contained in this tree.
 
+        This method has an amortized and worst-case time complexity of O[1].
+
         Returns:
             int: The number of items contained in this tree.
         """
@@ -159,6 +174,10 @@ class AvlTree(MutableMapping[_K, _V]):
 
     def __iter__(self) -> Iterator[_K]:
         """Iterates over all keys contained in this tree in sort order.
+
+        Getting the first key has an amortized and worst-case time complexity of
+        O[log(n)]. Iterating over all keys has an amortized and worst-case time
+        complexity of O[n].
 
         Returns:
             Iterator[_K]: The iterator object.
@@ -176,6 +195,8 @@ class AvlTree(MutableMapping[_K, _V]):
     def minimum(self) -> _K:
         """Gets the minimum key contained in this tree.
 
+        This method has an amortized and worst-case time complexity of O[log(n)].
+
         Returns:
             _K: The minimum key.
 
@@ -192,6 +213,8 @@ class AvlTree(MutableMapping[_K, _V]):
 
     def maximum(self) -> _K:
         """Gets the maximum key contained in this tree.
+
+        This method has an amortized and worst-case time complexity of O[log(n)].
 
         Returns:
             _K: The maximum key.
@@ -216,6 +239,11 @@ class AvlTree(MutableMapping[_K, _V]):
         treatment: Literal["inclusive", "exclusive"] = "inclusive",
     ) -> Iterator[_K]:
         """Iterates over all keys between the given start and stop in sort order.
+
+        Getting the first key has an amortized and worst-case time complexity of
+        O[log(n)]. Iterating over all keys has an amortized and worst-case time
+        complexity of O[k], where k is the number of items in only the interval between
+        start and stop.
 
         Args:
             start (_K | None): The key at which to start iterating. If None, iteration
