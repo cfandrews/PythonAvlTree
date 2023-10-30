@@ -19,8 +19,8 @@ pip install avltree
 
 ## Documentation
 ### Usage
-The `AvlTree` class implements the [MutableMapping](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
-generic interface and can be used in (almost) the exact same way as the [dict](https://docs.python.org/3/library/stdtypes.html#mapping-types-dict)
+The `AvlTree` class implements the [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+generic interface and can be used in (almost) the exact same way as the [`dict`](https://docs.python.org/3/library/stdtypes.html#mapping-types-dict)
 built-in collection.
 
 Basic dictionary-esque usage looks like:

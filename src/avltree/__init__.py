@@ -1,5 +1,5 @@
 # Copyright 2023 Charles Andrews
-"""Lightweight, pure-python AVL tree."""
+""".. include:: ../../README.md"""  # noqa: D415
 from __future__ import annotations
 
 from typing import Final
