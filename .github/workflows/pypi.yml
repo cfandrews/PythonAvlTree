@@ -1,4 +1,4 @@
-name: Publish
+name: PyPI
 
 on:
   release:
@@ -8,8 +8,8 @@ permissions:
   contents: read
 
 jobs:
-  pypi-publish:
-    name: Publish
+  pypi:
+    name: PyPI
     runs-on: ubuntu-latest
     environment: publish
     permissions:
@@ -26,4 +26,4 @@ jobs:
       - name: Publish
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages-dir: './build/build'
+          packages-dir: ./build/build
