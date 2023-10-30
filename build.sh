@@ -11,5 +11,5 @@ python3 -m venv ./build/venv
 ./build/venv/bin/ruff check ./tests
 ./build/venv/bin/mypy --cache-dir ./build/mypy
 ./build/venv/bin/pytest
-./build/venv/bin/pdoc ./src/avltree -o ./build/pdoc
+./build/venv/bin/pdoc ./src/avltree -o ./build/pdoc -t .
 ./build/venv/bin/python3 -m build --outdir ./build/build

@@ -7,3 +7,4 @@ from typing import Final
 from ._avl_tree import AvlTree
 
 __all__: Final[list[str]] = ["AvlTree"]
+__docformat__ = "google"

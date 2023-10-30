@@ -1,0 +1,18 @@
+{% extends "default/module.html.jinja2" %}
+{% macro is_public(doc) %}
+    {% if doc.qualname == "AvlTree.__getitem__" %}
+        true
+    {% elif doc.qualname == "AvlTree.__setitem__" %}
+        true
+    {% elif doc.qualname == "AvlTree.__delitem__" %}
+        true
+    {% elif doc.qualname == "AvlTree.__len__" %}
+        true
+    {% elif doc.qualname == "AvlTree.__iter__" %}
+        true
+    {% elif doc.qualname == "AvlTree.__repr__" %}
+        true
+    {% else %}
+        {{ default_is_public(doc) }}
+    {% endif %}
+{% endmacro %}
