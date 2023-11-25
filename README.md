@@ -9,8 +9,8 @@ This package is a lightweight, pure-Python implementation of the AVL tree. AVL t
 search trees, giving them both amortized and worst-case time complexities of O[log(n)] for insertion, deletion, and
 retrieval. More reference can be found on the [AVL tree Wikipedia page](https://en.wikipedia.org/wiki/AVL_tree).
 
-[PyPI](https://pypi.org/project/avltree/)\
-[Source](https://github.com/cfandrews/PythonAvlTree)\
+[PyPI](https://pypi.org/project/avltree/)  
+[Source](https://github.com/cfandrews/PythonAvlTree)  
 [Documentation](https://cfandrews.github.io/PythonAvlTree/avltree.html)
 
 ## Installation

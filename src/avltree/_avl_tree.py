@@ -52,12 +52,11 @@ class AvlTree(MutableMapping[_K, _V]):
         time complexity of O[n*log(n)].
 
         Example usage:
-        ```
+
         >>> from avltree import AvlTree
         >>> avl_tree = AvlTree[int, str]({0: 'a', 1: 'b'})
         >>> avl_tree
         AvlTree({0: 'a', 1: 'b'})
-        ```
 
         Args:
             mapping (dict[_K, _V] | None): An optional initial mapping of items to add
@@ -75,14 +74,13 @@ class AvlTree(MutableMapping[_K, _V]):
         This method has an amortized and worst-case time complexity of O[log(n)].
 
         Example usage:
-        ```
+
         >>> from avltree import AvlTree
         >>> avl_tree = AvlTree[int, str]({0: 'a', 1: 'b'})
         >>> avl_tree[0] = 'foo'
         >>> avl_tree[2] = 'c'
         >>> avl_tree
         AvlTree({0: 'foo', 1: 'b', 2: 'c'})
-        ```
 
         Args:
             __k (_K): The key to map.
@@ -120,13 +118,12 @@ class AvlTree(MutableMapping[_K, _V]):
         This method has an amortized and worst-case time complexity of O[log(n)].
 
         Example usage:
-        ```
+
         >>> from avltree import AvlTree
         >>> avl_tree = AvlTree[int, str]({0: 'a', 1: 'b'})
         >>> del avl_tree[0]
         >>> avl_tree
         AvlTree({1: 'b'})
-        ```
 
         Args:
             __k (_K): The key to delete from this tree.
@@ -195,14 +192,13 @@ class AvlTree(MutableMapping[_K, _V]):
         This method has an amortized and worst-case time complexity of O[log(n)].
 
         Example usage:
-        ```
+
         >>> from avltree import AvlTree
         >>> avl_tree = AvlTree[int, str]({0: 'a', 1: 'b'})
         >>> avl_tree[0]
         'a'
         >>> avl_tree[2]
         KeyError: 'Key not present in AvlTree: 2'
-        ```
 
         Args:
             __k (_K): The key.
@@ -229,12 +225,11 @@ class AvlTree(MutableMapping[_K, _V]):
         This method has an amortized and worst-case time complexity of O[1].
 
         Example usage:
-        ```
+
         >>> from avltree import AvlTree
         >>> avl_tree = AvlTree[int, str]({0: 'a', 1: 'b'})
         >>> len(avl_tree)
         2
-        ```
 
         Returns:
             int: The number of items contained in this tree.
@@ -249,7 +244,7 @@ class AvlTree(MutableMapping[_K, _V]):
         complexity of O[n].
 
         Example usage:
-        ```
+
         >>> from avltree import AvlTree
         >>> avl_tree = AvlTree[int, str]({0: 'a', 1: 'b'})
         >>> for key in avl_tree:
@@ -257,7 +252,6 @@ class AvlTree(MutableMapping[_K, _V]):
         ...
         0
         1
-        ```
 
         Returns:
             Iterator[_K]: The iterator object.
@@ -268,12 +262,12 @@ class AvlTree(MutableMapping[_K, _V]):
         """Builds a developer-friendly string representation of this AvlTree.
 
         Example usage:
-        ```
+
         >>> from avltree import AvlTree
         >>> avl_tree = AvlTree[int, str]({0: 'a', 1: 'b'})
         >>> repr(avl_tree)
         "AvlTree({0: 'a', 1: 'b'})"
-        ```
+
 
         Returns:
             str: A string representation of this AvlTree.
@@ -286,12 +280,11 @@ class AvlTree(MutableMapping[_K, _V]):
         This method has an amortized and worst-case time complexity of O[log(n)].
 
         Example usage:
-        ```
+
         >>> from avltree import AvlTree
         >>> avl_tree = AvlTree[int, str]({0: 'a', 1: 'b'})
         >>> avl_tree.minimum()
         0
-        ```
 
         Returns:
             _K: The minimum key.
@@ -313,12 +306,11 @@ class AvlTree(MutableMapping[_K, _V]):
         This method has an amortized and worst-case time complexity of O[log(n)].
 
         Example usage:
-        ```
+
         >>> from avltree import AvlTree
         >>> avl_tree = AvlTree[int, str]({0: 'a', 1: 'b'})
         >>> avl_tree.maximum()
         1
-        ```
 
         Returns:
             _K: The maximum key.
@@ -350,7 +342,7 @@ class AvlTree(MutableMapping[_K, _V]):
         start and stop.
 
         Example usage:
-        ```
+
         >>> from avltree import AvlTree
         >>> avl_tree = AvlTree[int, str]({0: 'a', 1: 'b', 2: 'c'})
         >>> for key in avl_tree.between(start=0, stop=2, treatment="inclusive"):
@@ -364,7 +356,6 @@ class AvlTree(MutableMapping[_K, _V]):
         ...
         1
         2
-        ```
 
         Args:
             start (_K | None): The key at which to start iterating. If None, iteration
